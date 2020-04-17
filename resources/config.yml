@@ -1,0 +1,101 @@
+---
+#CONFIG VERSION
+#DO NOT CHANGE THIS VALUE
+version: 1
+
+#ID of the relic. (Item given to player)
+relic-id: 399
+
+#List of Block IDs that relics can be found with.
+block-ids:
+  - 1
+  - 2
+  - 3
+
+#Choose if the message is shown when a user finds a relic
+found-message-enabled: true
+#How the message is received. Options: title, tip or message
+message-type: "title"
+#Choose if particles shown when a player finds/opens a relic
+particles-enabled: true
+
+#Rarity of Relic. Do not change this!
+common:
+  #Shown on relic item
+  name: "&6Common Relic"
+  #Title shown to player. Use "\n" for a new line!
+  title: "&bCongrats!\n&7You found a common relic!"
+  #Tip shown to player.
+  tip: "&bCongrats! &7You found a common relic!"
+  #Message shown to player.
+  message: "&bCongrats! &7You found a common relic!"
+  #Lore for relic
+  lore: "&7Right Click to claim your rewards!"
+  #Chance in %
+  chance: 50
+  #List of commands. Use {player} for the player.
+  #A command will be chosen at random from this list.
+  commands:
+    - "give {player} dirt 5"
+    - "give {player} stone 10"
+
+#Rarity of Relic. Do not change this!
+rare:
+  #Shown on relic item
+  name: "&6Rare Relic"
+  #Title shown to player
+  title: "&bCongrats!\n&7You found a rare relic!"
+  #Tip shown to player.
+  tip: "&bCongrats! &7You found a rare relic!"
+  #Message shown to player.
+  message: "&bCongrats! &7You found a rare relic!"
+  #Lore for relic
+  lore: "&7Right Click to claim your rewards!"
+  #Chance in %
+  chance: 25
+  #List of commands. Use {player} for the player.
+  #A command will be chosen at random from this list.
+  commands:
+    - "give {player} dirt 10"
+    - "give {player} stone 25"
+
+#Rarity of Relic. Do not change this!
+epic:
+  #Shown on relic item
+  name: "&6Epic Relic"
+  #Title shown to player
+  title: "&bCongrats!\n&7You found an epic relic!"
+  #Tip shown to player.
+  tip: "&bCongrats! &7You found an epic relic!"
+  #Message shown to player.
+  message: "&bCongrats! &7You found an epic relic!"
+  #Lore for relic
+  lore: "&7Right Click to claim your rewards!"
+  #Chance in %
+  chance: 15
+  #List of commands. Use {player} for the player.
+  #A command will be chosen at random from this list.
+  commands:
+    - "give {player} dirt 25"
+    - "give {player} stone 50"
+
+#Rarity of Relic. Do not change this!
+legendary:
+  #Shown on relic item
+  name: "&6Legendary Relic"
+  #Title shown to player
+  title: "&bCongrats!\n&7You found a legendary relic!"
+  #Tip shown to player.
+  tip: "&bCongrats! &7You found a legendary relic!"
+  #Message shown to player.
+  message: "&bCongrats! &7You found a legendary relic!"
+  #Lore for relic
+  lore: "&7Right Click to claim your rewards!"
+  #Chance in %
+  chance: 10
+  #List of commands. Use {player} for the player.
+  #A command will be chosen at random from this list.
+  commands:
+    - "give {player} dirt 50"
+    - "give {player} stone 64"
+...

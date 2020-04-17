@@ -1,0 +1,7 @@
+---
+name: Relics
+version: 1.1.0
+main: DuoIncure\Relics\Main
+api: 3.11.6
+description: An awesome relic plugin for PocketMine-MP!
+...
