@@ -4,7 +4,6 @@ namespace DuoIncure\Relics;
 
 use pocketmine\event\Listener;
 use pocketmine\nbt\tag\StringTag;
-use pocketmine\Player;
 use pocketmine\event\player\PlayerInteractEvent;
 use pocketmine\event\block\BlockBreakEvent;
 
@@ -30,20 +29,20 @@ class RelicsListener implements Listener {
 		if($ev->getAction() === PlayerInteractEvent::RIGHT_CLICK_BLOCK || $ev->getAction() === PlayerInteractEvent::RIGHT_CLICK_AIR){
 			$item = $ev->getItem();
 			$nbt = $item->getNamedTag();
-			if($nbt->hasTag(Main::RELIC_TAG)){
-				$relicType = $nbt->getTagValue(Main::RELIC_TAG, StringTag::class);
+			if($nbt->hasTag(RelicFunctions::RELIC_TAG)){
+				$relicType = $nbt->getTagValue(RelicFunctions::RELIC_TAG, StringTag::class);
 				switch($relicType){
 					case "common":
-						$this->plugin->giveCommonRelicReward($player, $item);
+						$this->plugin->getRelicFunctions()->giveCorrespondingReward($player, $item, "common");
 						break;
 					case "rare":
-						$this->plugin->giveRareRelicReward($player, $item);
+						$this->plugin->getRelicFunctions()->giveCorrespondingReward($player, $item, "rare");
 						break;
 					case "epic":
-						$this->plugin->giveEpicRelicReward($player, $item);
+						$this->plugin->getRelicFunctions()->giveCorrespondingReward($player, $item, "epic");
 						break;
 					case "legendary":
-						$this->plugin->giveLegendaryRelicReward($player, $item);
+						$this->plugin->getRelicFunctions()->giveCorrespondingReward($player, $item, "legendary");
 						break;
 				}
 			}
@@ -73,13 +72,13 @@ class RelicsListener implements Listener {
 			$legendaryChance = $config["legendary"]["chance"] ?? 10;
 			$chance = rand(1, 100);
 			if ($chance > $rareChance && $chance <= $commonChance) {
-				$this->plugin->giveCommonRelic($player);
+				$this->plugin->getRelicFunctions()->giveCorrespondingRelic($player, "common");
 			} else if ($chance > $epicChance && $chance <= $rareChance) {
-				$this->plugin->giveRareRelic($player);
+				$this->plugin->getRelicFunctions()->giveCorrespondingRelic($player, "rare");
 			} else if ($chance > $legendaryChance && $chance <= $epicChance) {
-				$this->plugin->giveEpicRelic($player);
+				$this->plugin->getRelicFunctions()->giveCorrespondingRelic($player, "epic");
 			} else if ($chance <= $legendaryChance) {
-				$this->plugin->giveLegendaryRelic($player);
+				$this->plugin->getRelicFunctions()->giveCorrespondingRelic($player, "legendary");
 			}
 		}
 	}
