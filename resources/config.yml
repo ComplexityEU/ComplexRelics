@@ -8,9 +8,16 @@ relic-id: 399
 
 #List of Block IDs that relics can be found with.
 block-ids:
-  - 1
-  - 2
+  - 4
   - 3
+  - 12
+  - 13
+  
+#List of Worlds where it apply [Array]
+worlds: ["*"]
+
+#Prevent placing block listed here to earn relic
+prevent-placing: false
 
 #Choose if the message is shown when a user finds a relic
 found-message-enabled: true
@@ -32,7 +39,7 @@ common:
   #Lore for relic
   lore: "&7Right Click to claim your rewards!"
   #Chance in %
-  chance: 50
+  chance: 5
   #List of commands. Use {player} for the player.
   #A command will be chosen at random from this list.
   commands:
@@ -52,7 +59,7 @@ rare:
   #Lore for relic
   lore: "&7Right Click to claim your rewards!"
   #Chance in %
-  chance: 25
+  chance: 3
   #List of commands. Use {player} for the player.
   #A command will be chosen at random from this list.
   commands:
@@ -72,7 +79,7 @@ epic:
   #Lore for relic
   lore: "&7Right Click to claim your rewards!"
   #Chance in %
-  chance: 15
+  chance: 2
   #List of commands. Use {player} for the player.
   #A command will be chosen at random from this list.
   commands:
@@ -92,7 +99,7 @@ legendary:
   #Lore for relic
   lore: "&7Right Click to claim your rewards!"
   #Chance in %
-  chance: 10
+  chance: 1
   #List of commands. Use {player} for the player.
   #A command will be chosen at random from this list.
   commands:

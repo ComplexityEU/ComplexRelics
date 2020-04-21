@@ -6,6 +6,7 @@ use pocketmine\event\Listener;
 use pocketmine\nbt\tag\StringTag;
 use pocketmine\event\player\PlayerInteractEvent;
 use pocketmine\event\block\BlockBreakEvent;
+use pocketmine\event\block\BlockPlaceEvent;
 
 class RelicsListener implements Listener {
 
@@ -56,16 +57,12 @@ class RelicsListener implements Listener {
 	 */
 	public function onBreak(BlockBreakEvent $ev){
 		$player = $ev->getPlayer();
-		$continueRelics = false;
 		$config = $this->plugin->getConfig()->getAll();
 		$blockID = $ev->getBlock()->getId();
 		$configBlocks = $config["block-ids"];
-		foreach($configBlocks as $cfgIds){
-			if($cfgIds === $blockID){
-				$continueRelics = true;
-			}
-		}
-		if($continueRelics === true) {
+		$levelName = $player->getLevel()->getName();
+		
+		if (in_array($blockID, $configBlocks) && ($config["worlds"][0] == "*" OR in_array($levelName, $config["worlds"]))) {
 			$commonChance = $config["common"]["chance"] ?? 50;
 			$rareChance = $config["rare"]["chance"] ?? 25;
 			$epicChance = $config["epic"]["chance"] ?? 15;
@@ -80,6 +77,18 @@ class RelicsListener implements Listener {
 			} else if ($chance <= $legendaryChance) {
 				$this->plugin->getRelicFunctions()->giveCorrespondingRelic($player, "legendary");
 			}
+		}
+	}
+
+	public function onPlace(BlockPlaceEvent $ev) {
+		$player = $ev->getPlayer();
+		$blockID = $ev->getBlock()->getId();
+		$config = $this->plugin->getConfig()->getAll();
+		$configBlocks = $config["block-ids"];
+		$levelName = $player->getLevel()->getName();
+
+		if (in_array($blockID, $configBlocks) && $config["prevent-placing"] == true && ($config["worlds"][0] == "*" OR in_array($levelName, $config["worlds"]))) {
+			$ev->setCancelled();
 		}
 	}
 }
