@@ -6,6 +6,8 @@ use pocketmine\event\Listener;
 use pocketmine\nbt\tag\StringTag;
 use pocketmine\event\player\PlayerInteractEvent;
 use pocketmine\event\block\BlockBreakEvent;
+use function in_array;
+use function rand;
 
 class RelicsListener implements Listener {
 
@@ -60,16 +62,13 @@ class RelicsListener implements Listener {
 		$config = $this->plugin->getConfig()->getAll();
 		$blockID = $ev->getBlock()->getId();
 		$configBlocks = $config["block-ids"];
-		foreach($configBlocks as $cfgIds){
-			if($cfgIds === $blockID){
-				$continueRelics = true;
-			}
-		}
-		if($continueRelics === true) {
-			$commonChance = $config["common"]["chance"] ?? 50;
-			$rareChance = $config["rare"]["chance"] ?? 25;
-			$epicChance = $config["epic"]["chance"] ?? 15;
-			$legendaryChance = $config["legendary"]["chance"] ?? 10;
+		$configWorlds = $config["worlds"];
+		$levelName = $player->getLevel()->getName();
+		if(in_array($blockID, $configBlocks) && ($configWorlds[0] == "*" OR in_array($levelName, $configWorlds))){
+			$commonChance = $config["common"]["chance"] ?? 10;
+			$rareChance = $config["rare"]["chance"] ?? 5;
+			$epicChance = $config["epic"]["chance"] ?? 3;
+			$legendaryChance = $config["legendary"]["chance"] ?? 1;
 			$chance = rand(1, 100);
 			if ($chance > $rareChance && $chance <= $commonChance) {
 				$this->plugin->getRelicFunctions()->giveCorrespondingRelic($player, "common");

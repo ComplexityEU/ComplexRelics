@@ -1,7 +1,7 @@
 ---
 #CONFIG VERSION
 #DO NOT CHANGE THIS VALUE
-version: 1
+version: 2
 
 #ID of the relic. (Item given to player)
 relic-id: 399
@@ -11,6 +11,10 @@ block-ids:
   - 1
   - 2
   - 3
+
+#List of supported worlds to find relics.
+#Use "*" for all worlds
+worlds: ["*"]
 
 #Choose if the message is shown when a user finds a relic
 found-message-enabled: true
@@ -31,8 +35,8 @@ common:
   message: "&bCongrats! &7You found a common relic!"
   #Lore for relic
   lore: "&7Right Click to claim your rewards!"
-  #Chance in %
-  chance: 50
+  #Chance to get the relic
+  chance: 10
   #List of commands. Use {player} for the player.
   #A command will be chosen at random from this list.
   commands:
@@ -51,8 +55,8 @@ rare:
   message: "&bCongrats! &7You found a rare relic!"
   #Lore for relic
   lore: "&7Right Click to claim your rewards!"
-  #Chance in %
-  chance: 25
+  #Chance to get the relic
+  chance: 5
   #List of commands. Use {player} for the player.
   #A command will be chosen at random from this list.
   commands:
@@ -71,8 +75,8 @@ epic:
   message: "&bCongrats! &7You found an epic relic!"
   #Lore for relic
   lore: "&7Right Click to claim your rewards!"
-  #Chance in %
-  chance: 15
+  #Chance to get the relic
+  chance: 3
   #List of commands. Use {player} for the player.
   #A command will be chosen at random from this list.
   commands:
@@ -91,8 +95,8 @@ legendary:
   message: "&bCongrats! &7You found a legendary relic!"
   #Lore for relic
   lore: "&7Right Click to claim your rewards!"
-  #Chance in %
-  chance: 10
+  #Chance to get the relic
+  chance: 1
   #List of commands. Use {player} for the player.
   #A command will be chosen at random from this list.
   commands:
