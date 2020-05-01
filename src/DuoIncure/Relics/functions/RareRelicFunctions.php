@@ -39,9 +39,9 @@ class RareRelicFunctions {
 	 */
 	public function createRareRelic(): Item{
 		$relic = ItemFactory::get($this->relicID, 0, 1);
-		$name = str_replace("&", "§", $this->cfg["rare"]["name"]);
+		$name = str_replace("&", "§", $this->cfg["rare"]["name"] ?? "&6Rare Relic");
 		$relic->setCustomName($name);
-		$lore = str_replace("&", "§", $this->cfg["rare"]["lore"]);
+		$lore = str_replace("&", "§", $this->cfg["rare"]["lore"] ?? "&7Right Click to claim your rewards!");
 		$relic->setLore([$lore]);
 		$nbt = $relic->getNamedTag();
 		$nbt->setTag(new StringTag(RelicFunctions::RELIC_TAG, self::RARITY));
@@ -55,15 +55,15 @@ class RareRelicFunctions {
 		$msgForm = $this->cfg["message-type"] ?? "title";
 		switch($msgForm){
 			case "title":
-				$title = str_replace("&", "§", $this->cfg["rare"]["title"]);
+				$title = str_replace("&", "§", $this->cfg["rare"]["title"] ?? "&bCongrats!\n&7You found a rare relic!");
 				$player->addTitle($title);
 				break;
 			case "tip":
-				$tip = str_replace("&", "§", $this->cfg["rare"]["tip"]);
+				$tip = str_replace("&", "§", $this->cfg["rare"]["tip"] ?? "&bCongrats! &7You found a rare relic!");
 				$player->sendTip($tip);
 				break;
 			case "message":
-				$message = str_replace("&", "§", $this->cfg["rare"]["message"]);
+				$message = str_replace("&", "§", $this->cfg["rare"]["message"] ?? "&bCongrats! &7You found a rare relic!");
 				$player->sendMessage($message);
 				break;
 		}
