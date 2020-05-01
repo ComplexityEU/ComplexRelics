@@ -39,9 +39,9 @@ class LegendaryRelicFunctions {
 	 */
 	public function createLegendaryRelic(): Item{
 		$relic = ItemFactory::get($this->relicID, 0, 1);
-		$name = str_replace("&", "§", $this->cfg["legendary"]["name"]);
+		$name = str_replace("&", "§", $this->cfg["legendary"]["name"] ?? "&6Legendary Relic");
 		$relic->setCustomName($name);
-		$lore = str_replace("&", "§", $this->cfg["legendary"]["lore"]);
+		$lore = str_replace("&", "§", $this->cfg["legendary"]["lore"] ?? "&7Right Click to claim your rewards!");
 		$relic->setLore([$lore]);
 		$nbt = $relic->getNamedTag();
 		$nbt->setTag(new StringTag(RelicFunctions::RELIC_TAG, self::RARITY));
@@ -55,15 +55,15 @@ class LegendaryRelicFunctions {
 		$msgForm = $this->cfg["message-type"] ?? "title";
 		switch($msgForm){
 			case "title":
-				$title = str_replace("&", "§", $this->cfg["legendary"]["title"]);
+				$title = str_replace("&", "§", $this->cfg["legendary"]["title"] ?? "&bCongrats!\n&7You found a legendary relic!");
 				$player->addTitle($title);
 				break;
 			case "tip":
-				$tip = str_replace("&", "§", $this->cfg["legendary"]["tip"]);
+				$tip = str_replace("&", "§", $this->cfg["legendary"]["tip"] ?? "&bCongrats! &7You found a legendary relic!");
 				$player->sendTip($tip);
 				break;
 			case "message":
-				$message = str_replace("&", "§", $this->cfg["legendary"]["message"]);
+				$message = str_replace("&", "§", $this->cfg["legendary"]["message"] ?? "&bCongrats! &7You found a legendary relic!");
 				$player->sendMessage($message);
 				break;
 		}
