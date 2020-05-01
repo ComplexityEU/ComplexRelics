@@ -39,9 +39,9 @@ class EpicRelicFunctions {
 	 */
 	public function createEpicRelic(): Item{
 		$relic = ItemFactory::get($this->relicID, 0, 1);
-		$name = str_replace("&", "§", $this->cfg["epic"]["name"]);
+		$name = str_replace("&", "§", $this->cfg["epic"]["name"] ?? "&6Epic Relic");
 		$relic->setCustomName($name);
-		$lore = str_replace("&", "§", $this->cfg["epic"]["lore"]);
+		$lore = str_replace("&", "§", $this->cfg["epic"]["lore"] ?? "&7Right Click to claim your rewards!");
 		$relic->setLore([$lore]);
 		$nbt = $relic->getNamedTag();
 		$nbt->setTag(new StringTag(RelicFunctions::RELIC_TAG, self::RARITY));
@@ -55,15 +55,15 @@ class EpicRelicFunctions {
 		$msgForm = $this->cfg["message-type"] ?? "title";
 		switch($msgForm){
 			case "title":
-				$title = str_replace("&", "§", $this->cfg["epic"]["title"]);
+				$title = str_replace("&", "§", $this->cfg["epic"]["title"] ?? "&bCongrats!\n&7You found an epic relic!");
 				$player->addTitle($title);
 				break;
 			case "tip":
-				$tip = str_replace("&", "§", $this->cfg["epic"]["tip"]);
+				$tip = str_replace("&", "§", $this->cfg["epic"]["tip"] ?? "&bCongrats! &7You found an epic relic!");
 				$player->sendTip($tip);
 				break;
 			case "message":
-				$message = str_replace("&", "§", $this->cfg["epic"]["message"]);
+				$message = str_replace("&", "§", $this->cfg["epic"]["message"] ?? "&bCongrats! &7You found an epic relic!");
 				$player->sendMessage($message);
 				break;
 		}

@@ -39,9 +39,9 @@ class CommonRelicFunctions {
 	 */
 	public function createCommonRelic(): Item{
 		$relic = ItemFactory::get($this->relicID, 0, 1);
-		$name = str_replace("&", "§", $this->cfg["common"]["name"]);
+		$name = str_replace("&", "§", $this->cfg["common"]["name"] ?? "&6Common Relic");
 		$relic->setCustomName($name);
-		$lore = str_replace("&", "§", $this->cfg["common"]["lore"]);
+		$lore = str_replace("&", "§", $this->cfg["common"]["lore"] ?? "&7Right Click to claim your rewards!");
 		$relic->setLore([$lore]);
 		$nbt = $relic->getNamedTag();
 		$nbt->setTag(new StringTag(RelicFunctions::RELIC_TAG, self::RARITY));
@@ -55,15 +55,15 @@ class CommonRelicFunctions {
 			$msgForm = $this->cfg["message-type"] ?? "title";
 			switch($msgForm){
 				case "title":
-					$title = str_replace("&", "§", $this->cfg["common"]["title"]);
+					$title = str_replace("&", "§", $this->cfg["common"]["title"] ?? "&bCongrats!\n&7You found a common relic!");
 					$player->addTitle($title);
 					break;
 				case "tip":
-					$tip = str_replace("&", "§", $this->cfg["common"]["tip"]);
+					$tip = str_replace("&", "§", $this->cfg["common"]["tip"] ?? "&bCongrats! &7You found a common relic!");
 					$player->sendTip($tip);
 					break;
 				case "message":
-					$message = str_replace("&", "§", $this->cfg["common"]["message"]);
+					$message = str_replace("&", "§", $this->cfg["common"]["message"] ?? "&bCongrats! &7You found a common relic!");
 					$player->sendMessage($message);
 					break;
 			}
