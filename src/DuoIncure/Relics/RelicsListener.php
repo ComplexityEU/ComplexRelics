@@ -35,16 +35,16 @@ class RelicsListener implements Listener {
 				$relicType = $nbt->getTagValue(RelicFunctions::RELIC_TAG, StringTag::class);
 				switch($relicType){
 					case "common":
-						$this->plugin->getRelicFunctions()->giveCorrespondingReward($player, $item, "common");
+						$this->plugin->getRelicFunctions()->giveRelicReward($player, $item, "common");
 						break;
 					case "rare":
-						$this->plugin->getRelicFunctions()->giveCorrespondingReward($player, $item, "rare");
+						$this->plugin->getRelicFunctions()->giveRelicReward($player, $item, "rare");
 						break;
 					case "epic":
-						$this->plugin->getRelicFunctions()->giveCorrespondingReward($player, $item, "epic");
+						$this->plugin->getRelicFunctions()->giveRelicReward($player, $item, "epic");
 						break;
 					case "legendary":
-						$this->plugin->getRelicFunctions()->giveCorrespondingReward($player, $item, "legendary");
+						$this->plugin->getRelicFunctions()->giveRelicReward($player, $item, "legendary");
 						break;
 				}
 			}
@@ -58,7 +58,6 @@ class RelicsListener implements Listener {
 	 */
 	public function onBreak(BlockBreakEvent $ev){
 		$player = $ev->getPlayer();
-		$continueRelics = false;
 		$config = $this->plugin->getConfig()->getAll();
 		$blockID = $ev->getBlock()->getId();
 		$configBlocks = $config["block-ids"];
@@ -69,15 +68,25 @@ class RelicsListener implements Listener {
 			$rareChance = $config["rare"]["chance"] ?? 5;
 			$epicChance = $config["epic"]["chance"] ?? 3;
 			$legendaryChance = $config["legendary"]["chance"] ?? 1;
-			$chance = rand(1, 100);
-			if ($chance > $rareChance && $chance <= $commonChance) {
-				$this->plugin->getRelicFunctions()->giveCorrespondingRelic($player, "common");
-			} else if ($chance > $epicChance && $chance <= $rareChance) {
-				$this->plugin->getRelicFunctions()->giveCorrespondingRelic($player, "rare");
-			} else if ($chance > $legendaryChance && $chance <= $epicChance) {
-				$this->plugin->getRelicFunctions()->giveCorrespondingRelic($player, "epic");
-			} else if ($chance <= $legendaryChance) {
-				$this->plugin->getRelicFunctions()->giveCorrespondingRelic($player, "legendary");
+			//Credit to SOFe and benda95280 for this chance system.
+			$chance = rand(1, 200);
+			if ($chance <= $commonChance) {
+				$this->plugin->getRelicFunctions()->giveRelic($player, "common", 1);
+				} else {
+				$chance -= $commonChance;
+				if ($chance <= $rareChance) {
+					$this->plugin->getRelicFunctions()->giveRelic($player, "rare", 1);
+				} else {
+					$chance -= $rareChance;
+					if ($chance <= $epicChance) {
+						$this->plugin->getRelicFunctions()->giveRelic($player, "epic", 1);
+					} else {
+						$chance -= $epicChance;
+						if ($chance <= $legendaryChance) {
+							$this->plugin->getRelicFunctions()->giveRelic($player, "legendary", 1);
+						}
+					}
+				}
 			}
 		}
 	}

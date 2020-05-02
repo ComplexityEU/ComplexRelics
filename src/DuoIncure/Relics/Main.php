@@ -5,8 +5,11 @@ namespace DuoIncure\Relics;
 
 use pocketmine\plugin\PluginBase;
 use pocketmine\utils\Config;
+use RuntimeException;
 use function mkdir;
 use function file_exists;
+use DuoIncure\Relics\commands\GiveRelicCommand;
+use DuoIncure\Relics\commands\RelicAllCommand;
 
 class Main extends PluginBase{
 
@@ -33,6 +36,10 @@ class Main extends PluginBase{
 		}
 		$this->relicFunctions = new RelicFunctions($this);
 		$this->getServer()->getPluginManager()->registerEvents(new RelicsListener($this), $this);
+		$this->getServer()->getCommandMap()->registerAll("relics", [
+			new GiveRelicCommand($this),
+			new RelicAllCommand($this)
+		]);
 	}
 
 	/**
@@ -40,7 +47,7 @@ class Main extends PluginBase{
 	 */
 	public function getRelicFunctions(){
 		if(!$this->relicFunctions instanceof RelicFunctions){
-			throw new \RuntimeException("relicFunctions was not an instanceof RelicFunctions");
+			throw new RuntimeException("relicFunctions was not an instanceof RelicFunctions");
 		}
 		return $this->relicFunctions;
 	}
