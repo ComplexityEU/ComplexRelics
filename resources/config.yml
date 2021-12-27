@@ -1,8 +1,4 @@
 ---
-#CONFIG VERSION
-#DO NOT CHANGE THIS VALUE
-version: 2
-
 #ID of the relic. (Item given to player)
 relic-id: 399
 

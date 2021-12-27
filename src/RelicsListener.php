@@ -3,6 +3,7 @@
 namespace DuoIncure\Relics;
 
 use pocketmine\event\Listener;
+use pocketmine\event\player\PlayerItemUseEvent;
 use pocketmine\nbt\tag\StringTag;
 use pocketmine\event\player\PlayerInteractEvent;
 use pocketmine\event\block\BlockBreakEvent;
@@ -11,43 +12,40 @@ use function rand;
 
 class RelicsListener implements Listener {
 
-	/** @var Main */
-	private $plugin;
+	/** @var Main $plugin */
+	private Main $plugin;
 
 	/**
 	 * RelicsListener constructor.
 	 * @param Main $plugin
 	 */
-	public function __construct(Main $plugin)
-	{
+	public function __construct(Main $plugin) {
 		$this->plugin = $plugin;
 	}
 
 	/**
-	 * @param PlayerInteractEvent $ev
+	 * @param PlayerItemUseEvent $ev
 	 */
-	public function onInteract(PlayerInteractEvent $ev){
+	public function onInteract(PlayerItemUseEvent $ev) {
 		$player = $ev->getPlayer();
-		if($ev->getAction() === PlayerInteractEvent::RIGHT_CLICK_BLOCK || $ev->getAction() === PlayerInteractEvent::RIGHT_CLICK_AIR){
-			$item = $ev->getItem();
-			$nbt = $item->getNamedTag();
-			if($nbt->hasTag(RelicFunctions::RELIC_TAG)){
-				$relicType = $nbt->getTagValue(RelicFunctions::RELIC_TAG, StringTag::class);
-				switch($relicType){
-					case "common":
-						$this->plugin->getRelicFunctions()->giveRelicReward($player, $item, "common");
-						break;
-					case "rare":
-						$this->plugin->getRelicFunctions()->giveRelicReward($player, $item, "rare");
-						break;
-					case "epic":
-						$this->plugin->getRelicFunctions()->giveRelicReward($player, $item, "epic");
-						break;
-					case "legendary":
-						$this->plugin->getRelicFunctions()->giveRelicReward($player, $item, "legendary");
-						break;
-				}
-			}
+		$item = $ev->getItem();
+		$nbt = $item->getNamedTag();
+		if($nbt->getTag(RelicFunctions::RELIC_TAG) !== null){
+		    $relicType = $nbt->getTag(RelicFunctions::RELIC_TAG)->getValue();
+		    switch($relicType){
+		        case "common":
+		            $this->plugin->getRelicFunctions()->giveRelicReward($player, $item, "common");
+		            break;
+		        case "rare":
+		            $this->plugin->getRelicFunctions()->giveRelicReward($player, $item, "rare");
+		            break;
+				case "epic":
+				    $this->plugin->getRelicFunctions()->giveRelicReward($player, $item, "epic");
+				    break;
+				case "legendary":
+				    $this->plugin->getRelicFunctions()->giveRelicReward($player, $item, "legendary");
+				    break;
+		    }
 		}
 	}
 
@@ -62,7 +60,7 @@ class RelicsListener implements Listener {
 		$blockID = $ev->getBlock()->getId();
 		$configBlocks = $config["block-ids"];
 		$configWorlds = $config["worlds"];
-		$levelName = $player->getLevel()->getName();
+		$levelName = $player->getWorld()->getDisplayName();
 		if(in_array($blockID, $configBlocks) && ($configWorlds[0] == "*" OR in_array($levelName, $configWorlds))){
 			$commonChance = $config["common"]["chance"] ?? 10;
 			$rareChance = $config["rare"]["chance"] ?? 5;

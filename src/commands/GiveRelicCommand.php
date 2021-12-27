@@ -2,7 +2,7 @@
 
 namespace DuoIncure\Relics\commands;
 
-use pocketmine\command\PluginCommand;
+use pocketmine\command\Command;
 use pocketmine\command\CommandSender;
 use pocketmine\utils\TextFormat as TF;
 use DuoIncure\Relics\Main;
@@ -10,21 +10,19 @@ use function in_array;
 use function is_numeric;
 use function strtolower;
 
-class GiveRelicCommand extends PluginCommand {
+class GiveRelicCommand extends Command {
 
-	/** @var Main */
-	private $plugin;
+	/** @var Main $plugin */
+	private Main $plugin;
 
 	/**
 	 * GiveRelicCommand constructor.
 	 * @param Main $plugin
 	 */
-	public function __construct(Main $plugin)
-	{
+	public function __construct(Main $plugin) {
 		$this->plugin = $plugin;
-		parent::__construct("giverelic", $plugin);
+		parent::__construct("giverelic", "Give someone relics!", "/giverelic <name> <type> <amount>");
 		$this->setPermission("relics.command.giverelic");
-		$this->setDescription("Give someone relics!");
 	}
 
 	public function execute(CommandSender $sender, string $commandLabel, array $args)
@@ -50,7 +48,7 @@ class GiveRelicCommand extends PluginCommand {
 
 		$player = $this->plugin->getServer()->getPlayerExact($args[0]);
 		$type = strtolower($args[1]);
-		$amount = $args[2];
+		$amount = (int)$args[2];
 
 		$this->plugin->getRelicFunctions()->giveRelic($player, $type, $amount);
 	}
