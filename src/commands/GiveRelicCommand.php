@@ -4,23 +4,20 @@ namespace DuoIncure\Relics\commands;
 
 use pocketmine\command\Command;
 use pocketmine\command\CommandSender;
+use pocketmine\plugin\PluginOwned;
+use pocketmine\plugin\PluginOwnedTrait;
 use pocketmine\utils\TextFormat as TF;
 use DuoIncure\Relics\Main;
 use function in_array;
 use function is_numeric;
 use function strtolower;
 
-class GiveRelicCommand extends Command {
+class GiveRelicCommand extends Command implements PluginOwned {
 
-	/** @var Main $plugin */
-	private Main $plugin;
+    use PluginOwnedTrait;
 
-	/**
-	 * GiveRelicCommand constructor.
-	 * @param Main $plugin
-	 */
 	public function __construct(Main $plugin) {
-		$this->plugin = $plugin;
+	    $this->owningPlugin = $plugin;
 		parent::__construct("giverelic", "Give someone relics!", "/giverelic <name> <type> <amount>");
 		$this->setPermission("relics.command.giverelic");
 	}
@@ -35,7 +32,7 @@ class GiveRelicCommand extends Command {
 		if(!isset($args[0])){
 			$sender->sendMessage(TF::RED . "You must provide some arguments!" . TF::EOL . "Usage: /giverelic [player] [type] [amount]");
 			return;
-		} elseif(!$this->plugin->getServer()->getPlayerExact($args[0])){
+		} elseif(!$this->getOwningPlugin()->getServer()->getPlayerExact($args[0])){
 			$sender->sendMessage(TF::RED . "You must provide a valid player!");
 			return;
 		} elseif(!isset($args[1]) || !in_array(strtolower($args[1]), $typesArray)){
@@ -46,10 +43,10 @@ class GiveRelicCommand extends Command {
 			return;
 		}
 
-		$player = $this->plugin->getServer()->getPlayerExact($args[0]);
+		$player = $this->getOwningPlugin()->getServer()->getPlayerExact($args[0]);
 		$type = strtolower($args[1]);
 		$amount = (int)$args[2];
 
-		$this->plugin->getRelicFunctions()->giveRelic($player, $type, $amount);
+		$this->getOwningPlugin()->getRelicFunctions()->giveRelic($player, $type, $amount);
 	}
 }

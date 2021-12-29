@@ -4,23 +4,20 @@ namespace DuoIncure\Relics\commands;
 
 use pocketmine\command\Command;
 use pocketmine\command\CommandSender;
+use pocketmine\plugin\PluginOwned;
+use pocketmine\plugin\PluginOwnedTrait;
 use pocketmine\utils\TextFormat as TF;
 use DuoIncure\Relics\Main;
 use function in_array;
 use function is_numeric;
 use function strtolower;
 
-class RelicAllCommand extends Command {
+class RelicAllCommand extends Command implements PluginOwned {
 
-	/** @var Main $plugin */
-	private Main $plugin;
+    use PluginOwnedTrait;
 
-	/**
-	 * RelicAllCommand constructor.
-	 * @param Main $plugin
-	 */
 	public function __construct(Main $plugin) {
-		$this->plugin = $plugin;
+        $this->owningPlugin = $plugin;
 		parent::__construct("relicall", "Give everyone online relics!", "/relicall <type> <amount>");
 		$this->setPermission("relics.command.relicall");
 		$this->setDescription("Give everyone online relics!");
@@ -52,10 +49,10 @@ class RelicAllCommand extends Command {
 		$type = strtolower($args[0]);
 		$amount = (int)$args[1];
 
-		foreach ($this->plugin->getServer()->getOnlinePlayers() as $player) {
-			$this->plugin->getRelicFunctions()->giveRelic($player, $type, $amount);
+		foreach ($this->getOwningPlugin()->getServer()->getOnlinePlayers() as $player) {
+			$this->getOwningPlugin()->getRelicFunctions()->giveRelic($player, $type, $amount);
 		}
 		$broadcastMessage = "&7[&l&6Relics&r&7] &6Everyone online just got given " . $amount . "x $type relics!";
-		$this->plugin->getServer()->broadcastMessage(TF::colorize($broadcastMessage), $this->plugin->getServer()->getOnlinePlayers());
+		$this->getOwningPlugin()->getServer()->broadcastMessage(TF::colorize($broadcastMessage), $this->plugin->getServer()->getOnlinePlayers());
 	}
 }
