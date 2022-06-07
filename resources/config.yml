@@ -1,6 +1,6 @@
 ---
-#ID of the relic. (Item given to player)
-relic-id: 399
+#Config Version. DO NOT CHANGE THIS UNLESS YOU KNOW WHAT YOU ARE DOING
+config-version: 2
 
 #List of Block IDs that relics can be found with.
 block-ids:

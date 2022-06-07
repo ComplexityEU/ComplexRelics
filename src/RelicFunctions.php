@@ -4,7 +4,7 @@ namespace DuoIncure\Relics;
 
 use pocketmine\console\ConsoleCommandSender;
 use pocketmine\item\Item;
-use pocketmine\item\ItemFactory;
+use pocketmine\item\VanillaItems;
 use pocketmine\Server;
 use pocketmine\world\particle\HappyVillagerParticle;
 use pocketmine\world\particle\HugeExplodeSeedParticle;
@@ -20,9 +20,8 @@ class RelicFunctions {
 
 	public const RELIC_TAG = "isRelic";
 
-	/** @var Main $plugin */
 	private Main $plugin;
-	private $cfg, $relicID;
+	private array $cfg;
 
 	/**
 	 * RelicFunctions constructor.
@@ -31,7 +30,6 @@ class RelicFunctions {
 	public function __construct(Main $plugin){
 		$this->plugin = $plugin;
 		$this->cfg = $plugin->getConfig()->getAll();
-		$this->relicID = $this->cfg["relic-id"] ?? 399;
 	}
 
 	/**
@@ -40,7 +38,7 @@ class RelicFunctions {
 	 * @return Item
 	 */
 	public function createRelic(string $type, int $amount): Item {
-		$relic = ItemFactory::getInstance()->get($this->relicID, 0, $amount);
+		$relic = VanillaItems::NETHER_STAR()->setCount($amount);
 		$ucfName = ucfirst($type);
 		$name = str_replace("&", "§", $this->cfg[$type]["name"] ?? "&6$ucfName Relic") ;
 		$relic->setCustomName($name);
@@ -55,7 +53,7 @@ class RelicFunctions {
 	 * @param Player $player
 	 * @param Item $relic
 	 */
-	public function giveRelicToPlayer(Player $player, Item $relic){
+	public function giveRelicToPlayer(Player $player, Item $relic): void {
 		$playerInventory = $player->getInventory();
 		$playerX = $player->getPosition()->getX();
 		$playerY = $player->getPosition()->getY();
@@ -74,7 +72,7 @@ class RelicFunctions {
      * @param string $type
      * @param int $amount
      */
-	public function giveRelic(Player $player, string $type, int $amount) {
+	public function giveRelic(Player $player, string $type, int $amount): void {
 		$relic = $this->createRelic($type, $amount);
 		$msgEnabled = $this->cfg["found-message-enabled"] ?? true;
 		if($msgEnabled === true) {
@@ -92,7 +90,7 @@ class RelicFunctions {
 	 * @param Item $relic
 	 * @param string $type
 	 */
-	public function giveRelicReward(Player $player, Item $relic, string $type) {
+	public function giveRelicReward(Player $player, Item $relic, string $type): void {
 		$rewardArray = $this->cfg[$type]["commands"];
 		$chosenReward = $rewardArray[array_rand($rewardArray)];
 		$commandToUse = str_replace("{player}", $player->getName(), $chosenReward);
@@ -109,7 +107,7 @@ class RelicFunctions {
 	 * @param Player $player
 	 * @param string $type
 	 */
-	public function sendCorrespondingParticles(Player $player, string $type){
+	public function sendCorrespondingParticles(Player $player, string $type): void {
 		$x = $player->getPosition()->getX();
 		$y = $player->getPosition()->getY();
 		$z = $player->getPosition()->getZ();
@@ -128,7 +126,7 @@ class RelicFunctions {
 	 * @param Player $player
 	 * @param string $type
 	 */
-	public function sendCorrespondingMessage(Player $player, string $type){
+	public function sendCorrespondingMessage(Player $player, string $type): void {
 		$msgForm = $this->cfg["message-type"] ?? "title";
 		switch($msgForm){
 			case "title":

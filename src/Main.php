@@ -9,10 +9,9 @@ use DuoIncure\Relics\commands\RelicAllCommand;
 
 class Main extends PluginBase {
 
-	/** @var RelicFunctions $relicFunctions */
 	private RelicFunctions $relicFunctions;
 
-	public function onEnable(): void {
+	protected function onEnable(): void {
 		$this->saveDefaultConfig();
 		$this->relicFunctions = new RelicFunctions($this);
 		$this->getServer()->getPluginManager()->registerEvents(new RelicsListener($this), $this);
@@ -25,8 +24,7 @@ class Main extends PluginBase {
 	/**
 	 * @return RelicFunctions|null
 	 */
-	public function getRelicFunctions(): ?RelicFunctions{
+	public function getRelicFunctions(): ?RelicFunctions {
 		return $this->relicFunctions ?? null;
 	}
-
 }

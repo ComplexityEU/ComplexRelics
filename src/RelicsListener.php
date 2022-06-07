@@ -4,15 +4,12 @@ namespace DuoIncure\Relics;
 
 use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerItemUseEvent;
-use pocketmine\nbt\tag\StringTag;
-use pocketmine\event\player\PlayerInteractEvent;
 use pocketmine\event\block\BlockBreakEvent;
 use function in_array;
 use function rand;
 
 class RelicsListener implements Listener {
 
-	/** @var Main $plugin */
 	private Main $plugin;
 
 	/**
@@ -26,7 +23,7 @@ class RelicsListener implements Listener {
 	/**
 	 * @param PlayerItemUseEvent $ev
 	 */
-	public function onInteract(PlayerItemUseEvent $ev) {
+	public function onInteract(PlayerItemUseEvent $ev): void {
 		$player = $ev->getPlayer();
 		$item = $ev->getItem();
 		$nbt = $item->getNamedTag();
@@ -54,7 +51,7 @@ class RelicsListener implements Listener {
 	 * @priority MONITOR
 	 * @ignoreCancelled true
 	 */
-	public function onBreak(BlockBreakEvent $ev){
+	public function onBreak(BlockBreakEvent $ev): void {
 		$player = $ev->getPlayer();
 		$config = $this->plugin->getConfig()->getAll();
 		$blockID = $ev->getBlock()->getId();
@@ -66,7 +63,7 @@ class RelicsListener implements Listener {
 			$rareChance = $config["rare"]["chance"] ?? 5;
 			$epicChance = $config["epic"]["chance"] ?? 3;
 			$legendaryChance = $config["legendary"]["chance"] ?? 1;
-			//Credit to SOFe and benda95280 for this chance system.
+			//Credit to @SOF3 and @benda95280 for this chance system.
 			$chance = rand(1, 200);
 			if ($chance <= $commonChance) {
 				$this->plugin->getRelicFunctions()->giveRelic($player, "common", 1);
