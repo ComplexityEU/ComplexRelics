@@ -27,20 +27,21 @@ class RelicsListener implements Listener {
 		$player = $ev->getPlayer();
 		$item = $ev->getItem();
 		$nbt = $item->getNamedTag();
-		if($nbt->getTag(RelicFunctions::RELIC_TAG) !== null){
+        $rFunctions = $this->plugin->getRelicFunctions();
+		if($rFunctions !== null && $nbt->getTag(RelicFunctions::RELIC_TAG) !== null){
 		    $relicType = $nbt->getTag(RelicFunctions::RELIC_TAG)->getValue();
 		    switch($relicType){
 		        case "common":
-		            $this->plugin->getRelicFunctions()->giveRelicReward($player, $item, "common");
+                    $rFunctions->giveRelicReward($player, $item, RelicFunctions::TYPE_COMMON);
 		            break;
 		        case "rare":
-		            $this->plugin->getRelicFunctions()->giveRelicReward($player, $item, "rare");
+                    $rFunctions->giveRelicReward($player, $item, RelicFunctions::TYPE_RARE);
 		            break;
 				case "epic":
-				    $this->plugin->getRelicFunctions()->giveRelicReward($player, $item, "epic");
+                    $rFunctions->giveRelicReward($player, $item, RelicFunctions::TYPE_EPIC);
 				    break;
 				case "legendary":
-				    $this->plugin->getRelicFunctions()->giveRelicReward($player, $item, "legendary");
+                    $rFunctions->giveRelicReward($player, $item, RelicFunctions::TYPE_LEGENDARY);
 				    break;
 		    }
 		}
@@ -53,36 +54,39 @@ class RelicsListener implements Listener {
 	 */
 	public function onBreak(BlockBreakEvent $ev): void {
 		$player = $ev->getPlayer();
-		$config = $this->plugin->getConfig()->getAll();
+		$config = $this->plugin->getConfig();
 		$blockID = $ev->getBlock()->getId();
-		$configBlocks = $config["block-ids"];
-		$configWorlds = $config["worlds"];
+		$configBlocks = (array)$config->get("block-ids", []);
+		$configWorlds = (array)$config->get("worlds", []);
 		$levelName = $player->getWorld()->getDisplayName();
-		if(in_array($blockID, $configBlocks) && ($configWorlds[0] == "*" OR in_array($levelName, $configWorlds))){
-			$commonChance = $config["common"]["chance"] ?? 10;
-			$rareChance = $config["rare"]["chance"] ?? 5;
-			$epicChance = $config["epic"]["chance"] ?? 3;
-			$legendaryChance = $config["legendary"]["chance"] ?? 1;
-			//Credit to @SOF3 and @benda95280 for this chance system.
-			$chance = rand(1, 200);
-			if ($chance <= $commonChance) {
-				$this->plugin->getRelicFunctions()->giveRelic($player, "common", 1);
-				} else {
-				$chance -= $commonChance;
-				if ($chance <= $rareChance) {
-					$this->plugin->getRelicFunctions()->giveRelic($player, "rare", 1);
-				} else {
-					$chance -= $rareChance;
-					if ($chance <= $epicChance) {
-						$this->plugin->getRelicFunctions()->giveRelic($player, "epic", 1);
-					} else {
-						$chance -= $epicChance;
-						if ($chance <= $legendaryChance) {
-							$this->plugin->getRelicFunctions()->giveRelic($player, "legendary", 1);
-						}
-					}
-				}
-			}
-		}
+        $rFunctions = $this->plugin->getRelicFunctions();
+        if($rFunctions !== null) {
+            if (in_array($blockID, $configBlocks, true) && ($configWorlds[0] == "*" or in_array($levelName, $configWorlds, true))) {
+                $commonChance = (int)$config->getNested("common.chance", 10);
+                $rareChance = (int)$config->getNested("rare.chance", 5);
+                $epicChance = (int)$config->getNested("epic.chance", 3);
+                $legendaryChance = (int)$config->getNested("legendary.chance", 1);
+                //Credit to @SOF3 and @benda95280 for this chance system.
+                $chance = rand(1, 200);
+                if ($chance <= $commonChance) {
+                    $rFunctions->giveRelic($player, RelicFunctions::TYPE_COMMON, 1);
+                } else {
+                    $chance -= $commonChance;
+                    if ($chance <= $rareChance) {
+                        $rFunctions->giveRelic($player, RelicFunctions::TYPE_RARE, 1);
+                    } else {
+                        $chance -= $rareChance;
+                        if ($chance <= $epicChance) {
+                            $rFunctions->giveRelic($player, RelicFunctions::TYPE_EPIC, 1);
+                        } else {
+                            $chance -= $epicChance;
+                            if ($chance <= $legendaryChance) {
+                                $rFunctions->giveRelic($player, RelicFunctions::TYPE_LEGENDARY, 1);
+                            }
+                        }
+                    }
+                }
+            }
+        }
 	}
 }

@@ -23,6 +23,9 @@ class GiveRelicCommand extends Command implements PluginOwned {
 	}
 
 	public function execute(CommandSender $sender, string $commandLabel, array $args): bool {
+        /** @var Main $plugin */
+        $plugin = $this->getOwningPlugin();
+
 		$typesArray = ["common", "rare", "epic", "legendary"];
 		if(!$this->testPermission($sender)){
 			$sender->sendMessage(TF::RED . "You do not have permission to use this command!");
@@ -31,10 +34,10 @@ class GiveRelicCommand extends Command implements PluginOwned {
 		if(!isset($args[0])) {
 			$sender->sendMessage(TF::RED . "You must provide some arguments!" . TF::EOL . "Usage: /giverelic <name> <type> <amount>");
 			return false;
-		} elseif(!$this->getOwningPlugin()->getServer()->getPlayerExact($args[0])) {
+		} elseif(($player = $plugin->getServer()->getPlayerExact($args[0])) === null) {
 			$sender->sendMessage(TF::RED . "You must provide a valid player!");
 			return false;
-		} elseif(!isset($args[1]) || !in_array(strtolower($args[1]), $typesArray)) {
+		} elseif(!isset($args[1]) || !in_array(strtolower($args[1]), $typesArray, true)) {
 			$sender->sendMessage(TF::RED . "You must enter a valid relic type!" . TF::EOL . "Valid Types: common, rare, epic, legendary");
 			return false;
 		} elseif(!isset($args[2]) || !is_numeric($args[2])) {
@@ -42,11 +45,10 @@ class GiveRelicCommand extends Command implements PluginOwned {
 			return false;
 		}
 
-		$player = $this->getOwningPlugin()->getServer()->getPlayerExact($args[0]);
 		$type = strtolower($args[1]);
 		$amount = (int)$args[2];
 
-		$this->getOwningPlugin()->getRelicFunctions()->giveRelic($player, $type, $amount);
+        $plugin->getRelicFunctions()?->giveRelic($player, $type, $amount);
 		return true;
 	}
 }

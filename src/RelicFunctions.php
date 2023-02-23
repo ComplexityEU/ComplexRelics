@@ -20,7 +20,13 @@ class RelicFunctions {
 
 	public const RELIC_TAG = "isRelic";
 
+    public const TYPE_COMMON = "common";
+    public const TYPE_RARE = "rare";
+    public const TYPE_EPIC = "epic";
+    public const TYPE_LEGENDARY = "legendary";
+
 	private Main $plugin;
+    /** @var mixed[]|string[] */
 	private array $cfg;
 
 	/**
