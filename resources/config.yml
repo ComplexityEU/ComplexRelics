@@ -2,11 +2,11 @@
 #Config Version. DO NOT CHANGE THIS UNLESS YOU KNOW WHAT YOU ARE DOING
 config-version: 2
 
-#List of Block IDs that relics can be found with.
+#List of Block names that relics can be found with.
 block-ids:
-  - 1
-  - 2
-  - 3
+  - stone
+  - grass
+  - dirt
 
 #List of supported worlds to find relics.
 #Use "*" for all worlds

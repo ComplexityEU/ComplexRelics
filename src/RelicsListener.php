@@ -2,66 +2,74 @@
 
 namespace DuoIncure\Relics;
 
+use pocketmine\block\Block;
+use pocketmine\block\CoralBlock;
 use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerItemUseEvent;
 use pocketmine\event\block\BlockBreakEvent;
+use function array_map;
 use function in_array;
+use function method_exists;
 use function rand;
+use function str_replace;
+use function strtolower;
 
 class RelicsListener implements Listener {
 
-	private Main $plugin;
+    private Main $plugin;
 
-	/**
-	 * RelicsListener constructor.
-	 * @param Main $plugin
-	 */
-	public function __construct(Main $plugin) {
-		$this->plugin = $plugin;
-	}
+    /**
+     * RelicsListener constructor.
+     * @param Main $plugin
+     */
+    public function __construct(Main $plugin) {
+        $this->plugin = $plugin;
+    }
 
-	/**
-	 * @param PlayerItemUseEvent $ev
-	 */
-	public function onInteract(PlayerItemUseEvent $ev): void {
-		$player = $ev->getPlayer();
-		$item = $ev->getItem();
-		$nbt = $item->getNamedTag();
+    /**
+     * @param PlayerItemUseEvent $ev
+     */
+    public function onInteract(PlayerItemUseEvent $ev): void {
+        $player = $ev->getPlayer();
+        $item = $ev->getItem();
+        $nbt = $item->getNamedTag();
         $rFunctions = $this->plugin->getRelicFunctions();
-		if($rFunctions !== null && $nbt->getTag(RelicFunctions::RELIC_TAG) !== null){
-		    $relicType = $nbt->getTag(RelicFunctions::RELIC_TAG)->getValue();
-		    switch($relicType){
-		        case "common":
+        if($rFunctions !== null && $nbt->getTag(RelicFunctions::RELIC_TAG) !== null){
+            $relicType = $nbt->getTag(RelicFunctions::RELIC_TAG)->getValue();
+            switch($relicType){
+                case "common":
                     $rFunctions->giveRelicReward($player, $item, RelicFunctions::TYPE_COMMON);
-		            break;
-		        case "rare":
+                    break;
+                case "rare":
                     $rFunctions->giveRelicReward($player, $item, RelicFunctions::TYPE_RARE);
-		            break;
-				case "epic":
+                    break;
+                case "epic":
                     $rFunctions->giveRelicReward($player, $item, RelicFunctions::TYPE_EPIC);
-				    break;
-				case "legendary":
+                    break;
+                case "legendary":
                     $rFunctions->giveRelicReward($player, $item, RelicFunctions::TYPE_LEGENDARY);
-				    break;
-		    }
-		}
-	}
+                    break;
+            }
+        }
+    }
 
-	/**
-	 * @param BlockBreakEvent $ev
-	 * @priority MONITOR
-	 * @ignoreCancelled true
-	 */
-	public function onBreak(BlockBreakEvent $ev): void {
-		$player = $ev->getPlayer();
-		$config = $this->plugin->getConfig();
-		$blockID = $ev->getBlock()->getId();
-		$configBlocks = (array)$config->get("block-ids", []);
-		$configWorlds = (array)$config->get("worlds", []);
-		$levelName = $player->getWorld()->getDisplayName();
+    /**
+     * @param BlockBreakEvent $ev
+     * @priority MONITOR
+     * @ignoreCancelled true
+     */
+    public function onBreak(BlockBreakEvent $ev): void {
+        $player = $ev->getPlayer();
+        $config = $this->plugin->getConfig();
+
+        $blockName = str_replace(" ", "_", strtolower($this->getBlockTypedName($ev->getBlock())));
+        $configBlocks = (array)$config->get("block-ids", []);
+        $blockNameArr = array_map('strtolower', $configBlocks);
+        $configWorlds = (array)$config->get("worlds", []);
+        $levelName = $player->getWorld()->getDisplayName();
         $rFunctions = $this->plugin->getRelicFunctions();
         if($rFunctions !== null) {
-            if (in_array($blockID, $configBlocks, true) && ($configWorlds[0] == "*" or in_array($levelName, $configWorlds, true))) {
+            if (in_array($blockName, $blockNameArr, true) && ($configWorlds[0] == "*" or in_array($levelName, $configWorlds, true))) {
                 $commonChance = (int)$config->getNested("common.chance", 10);
                 $rareChance = (int)$config->getNested("rare.chance", 5);
                 $epicChance = (int)$config->getNested("epic.chance", 3);
@@ -88,5 +96,17 @@ class RelicsListener implements Listener {
                 }
             }
         }
-	}
+    }
+
+    public function getBlockTypedName(Block $block): string{
+        if(method_exists($block, 'getColor')) {
+            $name = $block->getColor()->getDisplayName() . " " . $block->asItem()->getVanillaName();
+        } elseif($block instanceof CoralBlock) {
+            $name = $block->getCoralType()->getDisplayName() . " " . $block->asItem()->getVanillaName();
+        } else {
+            $name = $block->asItem()->getVanillaName();
+        }
+
+        return $name;
+    }
 }
