@@ -99,7 +99,7 @@ class RelicFunctions {
     public function giveRelicReward(Player $player, Item $relic, string $type): void {
         $rewardArray = $this->plugin->getConfig()->getNested("$type.commands");
         $chosenReward = $rewardArray[array_rand($rewardArray)];
-        $commandToUse = str_replace("{player}", $player->getName(), $chosenReward);
+        $commandToUse = str_replace("{player}", "\"{$player->getName()}\"", $chosenReward);
         $relic->setCount($relic->getCount() - 1);
         $player->getInventory()->setItem($player->getInventory()->getHeldItemIndex(), $relic);
         $this->plugin->getServer()->dispatchCommand(new ConsoleCommandSender(Server::getInstance(), Server::getInstance()->getLanguage()), $commandToUse);
