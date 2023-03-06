@@ -52,7 +52,6 @@ class RelicsListener implements Listener {
     /**
      * @param BlockBreakEvent $ev
      * @priority MONITOR
-     * @ignoreCancelled true
      */
     public function onBreak(BlockBreakEvent $ev): void {
         $player = $ev->getPlayer();
