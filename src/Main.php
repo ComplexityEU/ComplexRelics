@@ -31,7 +31,7 @@ class Main extends PluginBase {
         }
         if(count($numericBlocks) !== 0) {
             $numVals = implode("', '", $numericBlocks);
-            $this->getLogger()->error("Config found invalid values '{$numVals}' in 'blocks'. Please use block names instead of ids, such as 'stone', 'dirt', etc.");
+            $this->getLogger()->error("Config found invalid values '{$numVals}' in 'block-ids'. Please use block names instead of ids, such as 'stone', 'dirt', etc.");
         }
     }
 

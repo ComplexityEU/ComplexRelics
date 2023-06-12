@@ -61,11 +61,11 @@ class RelicsListener implements Listener {
         $blockNameArr = array_map('strtolower', $configBlocks);
         $blockAliases = StringToItemParser::getInstance()->lookupBlockAliases($ev->getBlock());
         $configWorlds = (array)$config->get("worlds", []);
-        $levelName = $player->getWorld()->getDisplayName();
+        $worldName = $player->getWorld()->getDisplayName();
         $rFunctions = $this->plugin->getRelicFunctions();
         if($rFunctions !== null) {
             foreach ($blockNameArr as $blockName) {
-                if (in_array($blockName, $blockAliases, true) && ($configWorlds[0] == "*" || in_array($levelName, $configWorlds, true))) {
+                if (in_array($blockName, $blockAliases, true) && ($configWorlds[0] == "*" || in_array($worldName, $configWorlds, true))) {
                     $commonChance = (int)$config->getNested("common.chance", 10);
                     $rareChance = (int)$config->getNested("rare.chance", 5);
                     $epicChance = (int)$config->getNested("epic.chance", 3);
